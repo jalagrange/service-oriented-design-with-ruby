@@ -3,6 +3,8 @@ ENV['SINATRA_ENV'] = 'test'
 require File.dirname(__FILE__) + '/../service'
 require 'rspec'
 require 'rack/test'
+require 'pry'
+require 'json'
 
 # set :environment, :test
 #Test::Unit::TestCase.send :include, Rack::Test::Methods
@@ -32,28 +34,28 @@ describe "service" do
     it "should return a user by name" do
       get '/api/v1/users/paul'
       last_response.should be_ok
-      attributes = JSON.parse(last_response.body)["user"]
+      attributes = JSON.parse(last_response.body)
       attributes["name"].should == "paul"
     end
 
     it "should return a user with an email" do
       get '/api/v1/users/paul'
       last_response.should be_ok
-      attributes = JSON.parse(last_response.body)["user"]
+      attributes = JSON.parse(last_response.body)
       attributes["email"].should == "paul@pauldix.net"
     end
 
     it "should not return a user's password" do
       get '/api/v1/users/paul'
       last_response.should be_ok
-      attributes = JSON.parse(last_response.body)["user"]
+      attributes = JSON.parse(last_response.body)
       attributes.should_not have_key("password")
     end
 
     it "should return a user with a bio" do
       get '/api/v1/users/paul'
       last_response.should be_ok
-      attributes = JSON.parse(last_response.body)["user"]
+      attributes = JSON.parse(last_response.body)
       attributes["bio"].should == "rubyist"
     end
 
@@ -72,7 +74,7 @@ describe "service" do
           :bio      => "southern bell"}.to_json
       last_response.should be_ok
       get '/api/v1/users/trotter'
-      attributes = JSON.parse(last_response.body)["user"]
+      attributes = JSON.parse(last_response.body)
       attributes["name"].should  == "trotter"
       attributes["email"].should == "no spam"
       attributes["bio"].should   == "southern bell"
@@ -90,7 +92,7 @@ describe "service" do
         :bio => "testing freak"}.to_json
       last_response.should be_ok
       get '/api/v1/users/bryan'
-      attributes = JSON.parse(last_response.body)["user"]
+      attributes = JSON.parse(last_response.body)
       attributes["bio"].should == "testing freak"
     end
   end
@@ -121,7 +123,7 @@ describe "service" do
       post '/api/v1/users/josh/sessions', {
         :password => "nyc.rb rules"}.to_json
       last_response.should be_ok
-      attributes = JSON.parse(last_response.body)["user"]
+      attributes = JSON.parse(last_response.body)
       attributes["name"].should == "josh"
     end
 
